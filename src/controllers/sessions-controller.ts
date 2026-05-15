@@ -3,6 +3,9 @@ import { AppError } from "@/utils/AppError.js";
 import type { Request, Response, NextFunction } from "express";
 import { compare } from "bcrypt-ts";
 import z from "zod";
+import { authConfig } from "@/configs/auth.js";
+import jwt from "jsonwebtoken";
+import type { SignOptions } from "jsonwebtoken";
 
 class SessionsController {
   async createSession(
@@ -29,9 +32,16 @@ class SessionsController {
       throw new AppError("Invalid credentials", 401);
     }
 
-    return response
-      .status(201)
-      .json({ message: "Session created successfully" });
+    const { secret, expiresIn } = authConfig.jwt;
+
+    const token = jwt.sign({ role: user.role }, secret, {
+      subject: String(user.id),
+      expiresIn: expiresIn as SignOptions["expiresIn"],
+    });
+
+    const { password: _, ...userWithoutPassword } = user;
+
+    return response.status(201).json({ token, user: userWithoutPassword });
   }
 }
 
