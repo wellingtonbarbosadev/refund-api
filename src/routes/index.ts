@@ -3,7 +3,7 @@ import { refundsRoutes } from "./refunds-routes.js";
 import { sessionsRoutes } from "./sessions-routes.js";
 import { usersRoutes } from "./users-routes.js";
 import { Router } from "express";
-import { verifyUserAuthorization } from "@/middlewares/verify-user-authorization.js";
+import { uploadsRoutes } from "./uploads-routes.js";
 
 const routes = Router();
 
@@ -12,5 +12,6 @@ routes.use("/sessions", sessionsRoutes);
 
 routes.use(ensureAuthenticated);
 routes.use("/refunds", refundsRoutes);
+routes.use("/upload", uploadsRoutes);
 
 export { routes };
