@@ -1,9 +1,13 @@
 import multer from "multer";
 import path from "path";
 import crypto from "crypto";
+import fs from "fs";
 
-const TMP_FOLDER = path.resolve(__dirname, "..", "..", "tmp");
+const TMP_FOLDER = path.resolve(process.cwd(), "tmp");
 const UPLOAD_FOLDER = path.resolve(TMP_FOLDER, "uploads");
+
+fs.mkdirSync(TMP_FOLDER, { recursive: true });
+fs.mkdirSync(UPLOAD_FOLDER, { recursive: true });
 
 const MAX_SIZE = 3; // 3MB
 const MAX_FILE_SIZE = 1024 * 1024 * MAX_SIZE;
