@@ -7,6 +7,33 @@ datasource db {
   provider = "sqlite"
 }
 
+model User {
+  id        String    @id @default(uuid())
+  name      String
+  email     String    @unique
+  password  String
+  role      UserRole  @default(employee)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  refunds   Refunds[]
+
+  @@map("users")
+}
+
+model Refunds {
+  id        String    @id @default(uuid())
+  amount    Float
+  name      String
+  category  Category
+  filename  String
+  userId    String
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  user      User      @relation(fields: [userId], references: [id])
+
+  @@map("refunds")
+}
+
 enum UserRole {
   employee
   manager
@@ -16,36 +43,12 @@ enum Category {
   travel
   food
   accommodation
+  health
+  subscription
+  groceries
+  entertainment
+  education
+  transport
+  housing
   other
-}
-
-model User {
-  id       String @id @default(uuid())      
-  name     String
-  email    String   @unique
-  password String
-
-  role     UserRole @default(employee)
-  refunds Refunds[]
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime? @updatedAt @map("updated_at")
-
-  @@map("users")
-}
-
-model Refunds {
-  id          String   @id @default(uuid())
-  amount      Float
-  name        String
-  category    Category
-  filename    String
-
-  userId      String
-  user        User     @relation(fields: [userId], references: [id])
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime? @updatedAt @map("updated_at")
-
-  @@map("refunds")
 }

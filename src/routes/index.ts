@@ -10,7 +10,7 @@ const routes = Router();
 routes.use("/users", usersRoutes);
 routes.use("/sessions", sessionsRoutes);
 
-routes.use(ensureAuthenticated, verifyUserAuthorization(["manager"]));
+routes.use(ensureAuthenticated);
 routes.use("/refunds", refundsRoutes);
 
 export { routes };
